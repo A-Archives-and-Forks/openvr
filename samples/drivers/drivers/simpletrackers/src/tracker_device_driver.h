@@ -16,6 +16,8 @@ enum MyComponent
 	MyComponent_trigger_value,
 	MyComponent_trigger_click,
 
+	MyComponent_grip_click,
+
 	MyComponent_MAX
 };
 

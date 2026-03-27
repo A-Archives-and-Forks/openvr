@@ -1,5 +1,8 @@
 //========= Copyright Valve Corporation ============//
 #include <vrcore/sharedlibtools_public.h>
+
+#include "vrcore/strtools_public.h"
+
 #include <string.h>
 
 #if defined(_WIN32)
@@ -14,7 +17,9 @@ SharedLibHandle SharedLib_Load( const char *pchPath, std::string *pErrStr )
 {
 	SharedLibHandle pHandle = nullptr;
 #if defined( _WIN32)
-	pHandle = ( SharedLibHandle )LoadLibraryEx( pchPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
+	std::wstring wsFixedPath = UTF8to16( pchPath );
+
+	pHandle = ( SharedLibHandle )LoadLibraryExW( wsFixedPath.c_str(), NULL, LOAD_WITH_ALTERED_SEARCH_PATH );
 #elif defined(POSIX)
 	pHandle = (SharedLibHandle) dlopen( pchPath, RTLD_LOCAL|RTLD_NOW );
 #endif

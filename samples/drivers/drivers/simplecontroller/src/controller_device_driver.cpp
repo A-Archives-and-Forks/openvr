@@ -11,8 +11,8 @@
 static const char *my_controller_main_settings_section = "driver_simplecontroller";
 
 // Individual right/left hand settings sections
-static const char *my_controller_right_settings_section = "driver_simplecontroller_left_controller";
-static const char *my_controller_left_settings_section = "driver_simplecontroller_right_controller";
+static const char *my_controller_right_settings_section = "driver_simplecontroller_right_controller";
+static const char *my_controller_left_settings_section = "driver_simplecontroller_left_controller";
 
 // These are the keys we want to retrieve the values for in the settings
 static const char *my_controller_settings_key_model_number = "mycontroller_model_number";

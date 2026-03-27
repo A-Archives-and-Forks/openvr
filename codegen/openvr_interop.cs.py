@@ -251,6 +251,7 @@ print("""
 			m_pVROverlay = null;
 			m_pVROverlayView = null;
 			m_pVRRenderModels = null;
+			m_pVRResources = null;
 			m_pVRExtendedDisplay = null;
 			m_pVRSettings = null;
 			m_pVRApplications = null;
@@ -374,6 +375,19 @@ print("""
 					m_pVRRenderModels = new CVRRenderModels(pInterface);
 			}
 			return m_pVRRenderModels;
+		}
+
+		public CVRResources VRResources()
+		{
+			CheckClear();
+			if (m_pVRResources == null)
+			{
+				var eError = EVRInitError.None;
+				var pInterface = OpenVRInterop.GetGenericInterface(FnTable_Prefix+IVRResources_Version, ref eError);
+				if (pInterface != IntPtr.Zero && eError == EVRInitError.None)
+					m_pVRResources = new CVRResources(pInterface);
+			}
+			return m_pVRResources;
 		}
 
 		public CVRExtendedDisplay VRExtendedDisplay()
@@ -514,6 +528,7 @@ print("""
 		private CVROverlay m_pVROverlay;
 		private CVROverlayView m_pVROverlayView;
 		private CVRRenderModels m_pVRRenderModels;
+		private CVRResources m_pVRResources;
 		private CVRExtendedDisplay m_pVRExtendedDisplay;
 		private CVRSettings m_pVRSettings;
 		private CVRApplications m_pVRApplications;
@@ -545,6 +560,7 @@ print("""
 	public static CVROverlay Overlay { get { return OpenVRInternal_ModuleContext.VROverlay(); } }
 	public static CVROverlayView OverlayView { get { return OpenVRInternal_ModuleContext.VROverlayView(); } }
 	public static CVRRenderModels RenderModels { get { return OpenVRInternal_ModuleContext.VRRenderModels(); } }
+	public static CVRResources Resources { get { return OpenVRInternal_ModuleContext.VRResources(); } }
 	public static CVRExtendedDisplay ExtendedDisplay { get { return OpenVRInternal_ModuleContext.VRExtendedDisplay(); } }
 	public static CVRSettings Settings { get { return OpenVRInternal_ModuleContext.VRSettings(); } }
 	public static CVRApplications Applications { get { return OpenVRInternal_ModuleContext.VRApplications(); } }
@@ -560,6 +576,8 @@ print("""
 	/** Finds the active installation of vrclient.dll and initializes it */
 	public static CVRSystem Init(ref EVRInitError peError, EVRApplicationType eApplicationType = EVRApplicationType.VRApplication_Scene, string pchStartupInfo= "")
 	{
+		CVRSystem pSystem = null;
+
 		try 
 		{
 			VRToken = InitInternal2(ref peError, eApplicationType, pchStartupInfo);
@@ -571,18 +589,24 @@ print("""
 
 		OpenVRInternal_ModuleContext.Clear();
 
-		if (peError != EVRInitError.None)
-			return null;
-
-		bool bInterfaceValid = IsInterfaceVersionValid(IVRSystem_Version);
-		if (!bInterfaceValid)
+		if (peError == EVRInitError.None && !IsInterfaceVersionValid(IVRSystem_Version))
 		{
-			ShutdownInternal();
 			peError = EVRInitError.Init_InterfaceNotFound;
-			return null;
 		}
 
-		return OpenVR.System;
+		if (peError == EVRInitError.None)
+		{
+			pSystem = OpenVR.System;
+			peError = pSystem.SetSDKVersion(k_nSteamVRVersionMajor, k_nSteamVRVersionMinor, k_nSteamVRVersionBuild);
+		}
+
+		if (peError != EVRInitError.None)
+		{
+			pSystem = null;
+			ShutdownInternal();
+		}
+
+		return pSystem;
 	}
 
 	/** unloads vrclient.dll. Any interface pointers from the interface are

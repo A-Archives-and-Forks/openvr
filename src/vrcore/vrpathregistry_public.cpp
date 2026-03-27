@@ -482,6 +482,7 @@ uint32_t CVRPathRegistry_Public::InitSteamAppId()
 }
 
 //-----------------------------------------------------------------------------
+// Purpose: Used by things that guess appkey to special case children of SteamVR processes
 //-----------------------------------------------------------------------------
 bool CVRPathRegistry_Public::IsChildOfVRServer()
 {

@@ -206,6 +206,8 @@ const char *GetIDForVRInitError( vr::EVRInitError eError )
 		RETURN_ENUM_AS_STRING( VRInitError_Init_VRDashboardTokenFailure );
 		RETURN_ENUM_AS_STRING( VRInitError_Init_VRDashboardEnvironmentFailure );
 		RETURN_ENUM_AS_STRING( VRInitError_Init_VRDashboardPathFailure );
+		RETURN_ENUM_AS_STRING( VRInitError_Init_InstallationTooOld );
+		RETURN_ENUM_AS_STRING( VRInitError_Init_ClientVersionAlreadyProvided );
 
 		RETURN_ENUM_AS_STRING( VRInitError_Driver_Failed );
 		RETURN_ENUM_AS_STRING( VRInitError_Driver_Unknown );
@@ -359,6 +361,13 @@ const char *GetIDForVRInitError( vr::EVRInitError eError )
 		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_HmdFound_UserDataAddressRange );
 		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_HmdFound_UserDataError );
 		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_HmdFound_UnexpectedConfiguration_1 );
+
+		// VRLink
+		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_VRLink_OutdatedDriverMESA );
+		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_VRLink_OutdatedDriverNVIDIA );
+		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_VRLink_NoVideoSupport );
+
+		RETURN_ENUM_AS_STRING( VRInitError_VendorSpecific_Oasis_UnlockRequired );
 
 		RETURN_ENUM_AS_STRING( VRInitError_Steam_SteamInstallationNotFound );
 
